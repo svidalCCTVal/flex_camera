@@ -45,7 +45,7 @@ while True:
 
 	# Aplicamos un umbral
 	umbral = cv2.threshold(resta, 100, 255, cv2.THRESH_BINARY)[1]
-
+       
 	# Dilatamos el umbral para tapar agujeros
 	umbral = cv2.dilate(umbral, None, iterations=2)
 
