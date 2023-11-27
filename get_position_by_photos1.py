@@ -27,8 +27,8 @@ gris_final = cv2.cvtColor(imagen_final, cv2.COLOR_BGR2GRAY)
 
 
 # Aplicar umbral para resaltar la marca
-_, umbral_inicial = cv2.threshold(gris_inicial, 200, 255, cv2.THRESH_BINARY)
-_, umbral_final = cv2.threshold(gris_final, 200, 255, cv2.THRESH_BINARY)
+_, umbral_inicial = cv2.threshold(gris_inicial, 250, 255, cv2.THRESH_BINARY_INV)
+_, umbral_final = cv2.threshold(gris_final, 250, 255, cv2.THRESH_BINARY_INV)
 
 # Encontrar contornos
 contornos_inicial, _ = cv2.findContours(umbral_inicial, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -50,7 +50,31 @@ print(f"Deformación en el eje X: {deformacion_x}")
 print(f"Deformación en el eje Y: {deformacion_y}")
 
 # Mostrar imágenes (opcional)
-cv2.imshow('Imagen Inicial', imagen_inicial_redim)
-cv2.imshow('Imagen Final', imagen_final_redim)
+cv2.imshow('Imagen Inicial', imagen_inicial)
+cv2.imshow('Imagen Final', imagen_final)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+
+# %% Prueba 2
+    
+import cv2 as cv
+from matplotlib import pyplot as plt
+
+img = cv.imread('posinit.jpg', cv.IMREAD_GRAYSCALE)
+# Initiate ORB detector
+orb = cv.ORB_create()
+# find the keypoints with ORB
+kp = orb.detect(img,None)
+# compute the descriptors with ORB
+kp, des = orb.compute(img, kp)
+# draw only keypoints location,not size and orientation
+img2 = cv.drawKeypoints(img, kp, None, color=(0,255,0), flags=0)
+plt.imshow(img2), plt.show()
+
+
+
+
+
+
+
