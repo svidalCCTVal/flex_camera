@@ -9,26 +9,27 @@ Created on Mon Nov 27 12:25:53 2023
 import cv2
 import numpy as np
 # Cargar imágenes
-imagen_inicial = cv2.imread('posinit.jpg')
-imagen_final = cv2.imread('posfin.jpg')
+imagen_inicial = cv2.imread('madera_rota2.jpg')
+imagen_final = cv2.imread('madera_rota1.jpg')
 
-#ancho_nuevo = 800
-#alto_nuevo = int(imagen_inicial[0]*(ancho_nuevo/imagen_inicial.shape[1]))
-
-#imagen_inicial_redim = cv2.resize(imagen_inicial, (1280, 720))
-#imagen_final_redim = cv2.resize(imagen_final, (1280, 720))
+imagen_inicial = cv2.resize(imagen_inicial, (1280, 720))
+imagen_final = cv2.resize(imagen_final, (1280, 720))
 
 # Convertir a escala de grises
 #gris_inicial = cv2.cvtColor(imagen_inicial_redim, cv2.COLOR_BGR2GRAY)
 #gris_final = cv2.cvtColor(imagen_final_redim, cv2.COLOR_BGR2GRAY)
+
+imagen_inicial_blured = cv2.medianBlur(imagen_inicial, 9)
+imagen_final_blured = cv2.medianBlur(imagen_final, 9)
+
 
 gris_inicial = cv2.cvtColor(imagen_inicial, cv2.COLOR_BGR2GRAY)
 gris_final = cv2.cvtColor(imagen_final, cv2.COLOR_BGR2GRAY)
 
 
 # Aplicar umbral para resaltar la marca
-_, umbral_inicial = cv2.threshold(gris_inicial, 250, 255, cv2.THRESH_BINARY_INV)
-_, umbral_final = cv2.threshold(gris_final, 250, 255, cv2.THRESH_BINARY_INV)
+umbral_inicial = cv2.threshold(gris_inicial, 190, 255, cv2.THRESH_BINARY)[1]
+umbral_final = cv2.threshold(gris_final, 190, 255, cv2.THRESH_BINARY)[1]
 
 # Encontrar contornos
 contornos_inicial, _ = cv2.findContours(umbral_inicial, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
