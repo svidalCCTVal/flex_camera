@@ -9,7 +9,7 @@ import cv2 as cv
 from sys import exit
 
 
-cap = cv.VideoCapture(1)
+cap = cv.VideoCapture('/dev/video0')
 
 if not cap.isOpened():
   print("Cannot open camera")

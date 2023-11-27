@@ -13,7 +13,7 @@ import cv2
 import time
 
 # Cargamos el vídeo
-camara = cv2.VideoCapture(1)
+camara = cv2.VideoCapture('/dev/video0')
 
 # Inicializamos el primer frame a vacío.
 # Nos servirá para obtener el fondo
@@ -44,7 +44,7 @@ while True:
 	resta = cv2.absdiff(fondo, gris)
 
 	# Aplicamos un umbral
-	umbral = cv2.threshold(resta, 150, 255, cv2.THRESH_BINARY)[1]
+	umbral = cv2.threshold(resta, 100, 255, cv2.THRESH_BINARY)[1]
 
 	# Dilatamos el umbral para tapar agujeros
 	umbral = cv2.dilate(umbral, None, iterations=2)
