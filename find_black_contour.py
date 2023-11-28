@@ -9,8 +9,10 @@ Created on Mon Nov 27 14:31:11 2023
 import cv2 
 import numpy as np 
 
+## PARTE DE PROCESO DE IMAGENES
+
 # Let's load a simple image with 3 black squares 
-image = cv2.imread('madera_rota4.jpg') 
+image = cv2.imread('madera_rota5.jpg') 
 cv2.waitKey(0) 
 
 image = cv2.resize(image, (1280, 720))
