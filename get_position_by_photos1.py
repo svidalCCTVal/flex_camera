@@ -10,7 +10,7 @@ import cv2
 import numpy as np
 # Cargar imágenes
 imagen_inicial = cv2.imread('madera_rota2.jpg')
-imagen_final = cv2.imread('madera_rota1.jpg')
+imagen_final = cv2.imread('madera_rota4.jpg')
 
 imagen_inicial = cv2.resize(imagen_inicial, (1280, 720))
 imagen_final = cv2.resize(imagen_final, (1280, 720))
@@ -23,21 +23,24 @@ imagen_inicial_blured = cv2.medianBlur(imagen_inicial, 9)
 imagen_final_blured = cv2.medianBlur(imagen_final, 9)
 
 
-gris_inicial = cv2.cvtColor(imagen_inicial, cv2.COLOR_BGR2GRAY)
-gris_final = cv2.cvtColor(imagen_final, cv2.COLOR_BGR2GRAY)
+gris_inicial = cv2.cvtColor(imagen_inicial_blured, cv2.COLOR_BGR2GRAY)
+gris_final = cv2.cvtColor(imagen_final_blured, cv2.COLOR_BGR2GRAY)
 
 
 # Aplicar umbral para resaltar la marca
-umbral_inicial = cv2.threshold(gris_inicial, 190, 255, cv2.THRESH_BINARY)[1]
+umbral_inicial = cv2.threshold(gris_inicial, 200, 255, cv2.THRESH_BINARY)[1]
 umbral_final = cv2.threshold(gris_final, 190, 255, cv2.THRESH_BINARY)[1]
 
 # Encontrar contornos
 contornos_inicial, _ = cv2.findContours(umbral_inicial, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 contornos_final, _ = cv2.findContours(umbral_final, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
+# Seleccionar contorno que abarca mayor área de imagen final
+max_area_contour = max(contornos_final, key=cv2.contourArea)
+
 # Dibujar contornos (opcional, solo para visualización)
 cv2.drawContours(imagen_inicial, contornos_inicial, -1, (0, 255, 0), 2)
-cv2.drawContours(imagen_final, contornos_final, -1, (0, 255, 0), 2)
+cv2.drawContours(imagen_final, [max_area_contour], -1, (0, 255, 0), 2)
 
 # Calcular centroides de los contornos
 centroide_inicial = np.mean(contornos_inicial[0], axis=0)[0]
@@ -46,6 +49,9 @@ centroide_final = np.mean(contornos_final[0], axis=0)[0]
 # Calcular deformación
 deformacion_x = centroide_final[0] - centroide_inicial[0]
 deformacion_y = centroide_final[1] - centroide_inicial[1]
+
+
+
 
 print(f"Deformación en el eje X: {deformacion_x}")
 print(f"Deformación en el eje Y: {deformacion_y}")
