@@ -9,7 +9,7 @@ import cv2 as cv
 from sys import exit
 
 
-cap = cv.VideoCapture('/dev/video0')
+cap = cv.VideoCapture(1)
 
 if not cap.isOpened():
   print("Cannot open camera")
@@ -28,7 +28,8 @@ while True:
   img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
   
   cv.rectangle(frame, pt1=(xmin,ymin), pt2=(xmax,ymax), color=(255,0,0), thickness=10)
-  resized = cv.resize(frame.copy(), (800,600))
+  #resized = cv.resize(frame.copy(), (800,600))
+  resized = frame.copy()
   del frame
   cv.imshow("color",resized)
   tecla = cv.waitKey(1)
