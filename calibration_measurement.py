@@ -13,7 +13,7 @@ import numpy as np
 
 
 # ## APERTURA DE VIDEO
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture('/dev/video0')
 
 while True:
     # Capture frame-by-frame
