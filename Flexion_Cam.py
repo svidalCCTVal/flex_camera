@@ -72,9 +72,10 @@ font = cv2.FONT_HERSHEY_COMPLEX
 relacion_pixel_mm = 0.1736111111111111
 
 # Cargar imágenes
-imagen_inicial = cv2.imread('madera_rota2.JPG')
-imagen_final = cv2.imread('madera_rota5.jpg')
+imagen_inicial = cv2.imread('madera_buena1.JPG')
+imagen_final = cv2.imread('pintada_final.jpg')
 
+# Re dimenzionar imagenes a tamaño 1280 o el que se requiera
 imagen_inicial = cv2.resize(imagen_inicial, (1280, 720))
 imagen_final = cv2.resize(imagen_final, (1280, 720))
 
@@ -89,7 +90,7 @@ gris_final = cv2.cvtColor(imagen_final_blured, cv2.COLOR_BGR2GRAY)
 
 # Aplicar umbral para resaltar la marca
 umbral_inicial = cv2.threshold(gris_inicial, 200, 255, cv2.THRESH_BINARY)[1]
-umbral_final = cv2.threshold(gris_final, 150, 255, cv2.THRESH_BINARY)[1]
+umbral_final = cv2.threshold(gris_final, 180, 255, cv2.THRESH_BINARY)[1]
 
 # Encontrar contornos
 contornos_inicial, _ = cv2.findContours(umbral_inicial, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -100,15 +101,28 @@ max_area_contour_final = max(contornos_final, key=cv2.contourArea)
 
 
 #ADAPTACIÓN DE FOR DE ESTA PÁGINA: https://www.geeksforgeeks.org/find-co-ordinates-of-contours-using-opencv-python/
-approx = cv2.approxPolyDP(max_area_contour_final, 0.005 * cv2.arcLength(max_area_contour_final, True), True) #calibrar aproximación por polygonos
 
-n = approx.ravel()
+# Obtener los vertices donde están las esquinas del contorno.
+approx = cv2.approxPolyDP(max_area_contour_final, 0.009 * cv2.arcLength(max_area_contour_final, True), True)
+print("Vertices de contorno: ", approx)
+print(len((approx)))
+
+x_array = approx[:, :, 0].ravel()
+y_array = approx[:, :, 1].ravel()
+
+y_ordenado = np.sort(y_array)[::-1]
+print(y_ordenado)
+
+# Transformar la matrix anterior a vector de una dimensión
+approx_matrix_flat = approx.ravel()
+
+#Contador de elementos en arreglo approx_matrix_flat
 i=0
 
-for j in n : 
+for j in approx_matrix_flat : 
         if(i % 2 == 0): 
-            x = n[i] 
-            y = n[i + 1] 
+            x = approx_matrix_flat[i] 
+            y = approx_matrix_flat[i + 1] 
   
             # String containing the co-ordinates. 
             string = str(x) + " " + str(y)  
@@ -128,6 +142,8 @@ for j in n :
 #cv2.drawContours(imagen_final, [max_area_contour_final], -1, (0, 255, 0), 2)
 cv2.drawContours(imagen_final, [approx], -1, (0, 255, 0), 2)
 
+# Dibujar lina de y minimos
+cv2.line(imagen_final,(0,y_ordenado[0]),(1280,y_ordenado[1]),(255,0,0),4)
 
 # Mostrar imágenes (opcional)
 #cv2.imshow('Imagen Inicial', imagen_inicial)
