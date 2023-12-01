@@ -8,27 +8,25 @@ Created on Wed Nov 29 16:40:41 2023
 import cv2
 import numpy as np
 
-# Cargar la imagen -- se deberia hacer con un frame cualquiera de la camara y ver qué entrega.
-#imagen = cv2.imread('aruco2.jpg')
+# CALIBRACION POR VIDEO
+#cap = cv2.VideoCapture('/dev/video0')
+#
+#while True:
+#    # Capture frame-by-frame
+#    ret, frame = cap.read()
+#    if not ret:
+#      continue
+#    resized = frame.copy()
+#    del frame
+#    cv2.imshow("Camara measurement",resized)
+#    tecla = cv2.waitKey(1)
+#    
+#    if tecla == ord('q'):
+#        imagen = resized
+#        break
 
-
-# ## APERTURA DE VIDEO
-cap = cv2.VideoCapture('/dev/video0')
-
-while True:
-    # Capture frame-by-frame
-    ret, frame = cap.read()
-    if not ret:
-      continue
-    resized = frame.copy()
-    del frame
-    cv2.imshow("Camara measurement",resized)
-    tecla = cv2.waitKey(1)
-    
-    if tecla == ord('q'):
-        imagen = resized
-        break
-
+# CALIBRACIÓN POR FOTO
+imagen = cv2.imread('aruco2.JPG')
 
 # Definir el nuevo tamaño deseado (ajusta según tus necesidades)
 nuevo_ancho = 1280
