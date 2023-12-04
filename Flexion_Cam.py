@@ -71,15 +71,16 @@ font = cv2.FONT_HERSHEY_COMPLEX
 #Relación pixel-milimetro
 relacion_pixel_mm = 0.1736111111111111
 
+
 # Cargar imágenes
-imagen_inicial = cv2.imread('madera_buena1.JPG')
-imagen_final = cv2.imread('pintada_final.jpg')
+imagen_inicial = cv2.imread('Imagenes/pintada_inicial.JPG')
+imagen_final = cv2.imread('Imagenes/pintada_final.jpg')
 
 # Re dimenzionar imagenes a tamaño 1280 o el que se requiera
 imagen_inicial = cv2.resize(imagen_inicial, (1280, 720))
 imagen_final = cv2.resize(imagen_final, (1280, 720))
 
-
+# Aplicar filtro gaussiano para difuminar bordes
 imagen_inicial_blured = cv2.medianBlur(imagen_inicial, 9)
 imagen_final_blured = cv2.medianBlur(imagen_final, 9)
 
@@ -97,26 +98,49 @@ contornos_inicial, _ = cv2.findContours(umbral_inicial, cv2.RETR_EXTERNAL, cv2.C
 contornos_final, _ = cv2.findContours(umbral_final, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
 # Seleccionar contorno que abarca mayor área de imagen final
+max_area_contour_inicial = max(contornos_inicial, key=cv2.contourArea)
 max_area_contour_final = max(contornos_final, key=cv2.contourArea)
 
 
-#ADAPTACIÓN DE FOR DE ESTA PÁGINA: https://www.geeksforgeeks.org/find-co-ordinates-of-contours-using-opencv-python/
+# LO QUE VIENE A CONTINUACIÓN ES UNA ADAPTACIÓN DE UN CICLO DE ESTA PÁGINA: https://www.geeksforgeeks.org/find-co-ordinates-of-contours-using-opencv-python/
 
-# Obtener los vertices donde están las esquinas del contorno.
-approx = cv2.approxPolyDP(max_area_contour_final, 0.009 * cv2.arcLength(max_area_contour_final, True), True)
-print("Vertices de contorno: ", approx)
-print(len((approx)))
+# Obtener los vertices donde están las esquinas del contorno. Variar parámetro de escalamiento en caso de querer distintas respuestas.
+approx_inicial = cv2.approxPolyDP(max_area_contour_inicial, 0.009 * cv2.arcLength(max_area_contour_inicial, True), True)
+approx_final = cv2.approxPolyDP(max_area_contour_final, 0.009 * cv2.arcLength(max_area_contour_final, True), True)
 
-x_array = approx[:, :, 0].ravel()
-y_array = approx[:, :, 1].ravel()
+# Hay que obtener el valor X de la coordenada con Y más alto, para poner el dibujo la imagen
+x_array_final = approx_final[:, :, 0].ravel() #no está ordenado
 
-y_ordenado = np.sort(y_array)[::-1]
-print(y_ordenado)
+print("Vertices de contorno: \n", approx_final)
 
+y_array_inicial = approx_inicial[:, :, 1].ravel()
+y_array_final = approx_final[:, :, 1].ravel()
+print("y_array_final:", y_array_final)
+print("x_array_final:", x_array_final)
+
+max_y_index = np.argmax(y_array_final)
+x_coordenate_y_max = x_array_final[max_y_index]
+
+y_ordenado_inicial = np.sort(y_array_inicial)[::-1]
+y_ordenado_final = np.sort(y_array_final)[::-1]
+
+print("[INICIAL] Coordenadas de Y ordenadas ",y_ordenado_inicial)
+print("[FINAL] Coordenadas de Y ordenadas ",y_ordenado_final)
+
+pos_inicial_y = y_ordenado_inicial[0]
+pos_final_y = y_ordenado_final[0] # corresponde al max value de las posiciones Y
+
+deformacion_final = (pos_final_y - pos_inicial_y)*0.1736111111111111
+print(" \n \n DEFORMACIÓN FINAL:   ", deformacion_final, "[mm]")
+
+# ACÁ EN ADELANTE SON CONFIGURACIONES DE VISUALIZACIÓN
+
+
+# A CONTINUACIÓN SE USA SOLO PARA PONER TEXTOS EN LAS ESQUINAS DETECTADAS
 # Transformar la matrix anterior a vector de una dimensión
-approx_matrix_flat = approx.ravel()
+approx_matrix_flat = approx_final.ravel()
 
-#Contador de elementos en arreglo approx_matrix_flat
+# Contador de elementos en arreglo approx_matrix_flat
 i=0
 
 for j in approx_matrix_flat : 
@@ -139,14 +163,15 @@ for j in approx_matrix_flat :
 
 # Dibujar contornos (opcional, solo para visualización)
 #cv2.drawContours(imagen_inicial, contornos_inicial, -1, (0, 255, 0), 2)
-#cv2.drawContours(imagen_final, [max_area_contour_final], -1, (0, 255, 0), 2)
-cv2.drawContours(imagen_final, [approx], -1, (0, 255, 0), 2)
+cv2.drawContours(imagen_inicial, [approx_inicial], -1, (0, 255, 0), 2)
+cv2.drawContours(imagen_final, [approx_final], -1, (0, 255, 0), 2)
 
 # Dibujar lina de y minimos
-cv2.line(imagen_final,(0,y_ordenado[0]),(1280,y_ordenado[1]),(255,0,0),4)
+cv2.line(imagen_inicial,(0,y_ordenado_inicial[0]),(1280,y_ordenado_inicial[1]),(255,0,0),4)
+cv2.line(imagen_final,(x_coordenate_y_max,pos_inicial_y),(x_coordenate_y_max,pos_final_y),(255,0,0),4)
 
 # Mostrar imágenes (opcional)
-#cv2.imshow('Imagen Inicial', imagen_inicial)
+cv2.imshow('Imagen Inicial', imagen_inicial)
 #cv2.imshow('Escala de grises Final', umbral_final)
 cv2.imshow('Imagen Final', imagen_final)
 cv2.waitKey(0)

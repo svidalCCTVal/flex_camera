@@ -26,7 +26,7 @@ import numpy as np
 #        break
 
 # CALIBRACIÓN POR FOTO
-imagen = cv2.imread('aruco2.JPG')
+imagen = cv2.imread('imagenes/aruco2.JPG')
 
 # Definir el nuevo tamaño deseado (ajusta según tus necesidades)
 nuevo_ancho = 1280
