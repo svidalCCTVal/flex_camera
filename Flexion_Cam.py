@@ -73,8 +73,8 @@ relacion_pixel_mm = 0.1736111111111111
 
 
 # Cargar imágenes
-imagen_inicial = cv2.imread('Imagenes/pintada_inicial.JPG')
-imagen_final = cv2.imread('Imagenes/pintada_final.jpg')
+imagen_inicial = cv2.imread('Imagenes_Flexion/pintada_inicial.JPG')
+imagen_final = cv2.imread('Imagenes_Flexion/pintada_final.jpg')
 
 # Re dimenzionar imagenes a tamaño 1280 o el que se requiera
 imagen_inicial = cv2.resize(imagen_inicial, (1280, 720))
