@@ -71,7 +71,6 @@ font = cv2.FONT_HERSHEY_COMPLEX
 #Relación pixel-milimetro
 relacion_pixel_mm = 0.1736111111111111
 
-
 # Cargar imágenes
 imagen_inicial = cv2.imread('Imagenes_Flexion/pintada_inicial.JPG')
 imagen_final = cv2.imread('Imagenes_Flexion/pintada_final.jpg')
@@ -88,21 +87,24 @@ imagen_final_blured = cv2.medianBlur(imagen_final, 9)
 gris_inicial = cv2.cvtColor(imagen_inicial_blured, cv2.COLOR_BGR2GRAY)
 gris_final = cv2.cvtColor(imagen_final_blured, cv2.COLOR_BGR2GRAY)
 
-
-# Aplicar umbral para resaltar la marca
+# Aplicar umbral para posteriormente detectar contornos con facilidad
 umbral_inicial = cv2.threshold(gris_inicial, 200, 255, cv2.THRESH_BINARY)[1]
 umbral_final = cv2.threshold(gris_final, 180, 255, cv2.THRESH_BINARY)[1]
 
-# Encontrar contornos
+# Encontrar contornos de imagen inicial y final
 contornos_inicial, _ = cv2.findContours(umbral_inicial, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 contornos_final, _ = cv2.findContours(umbral_final, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-# Seleccionar contorno que abarca mayor área de imagen final
+# Seleccionar contorno que abarca mayor área en cada imagen 
 max_area_contour_inicial = max(contornos_inicial, key=cv2.contourArea)
 max_area_contour_final = max(contornos_final, key=cv2.contourArea)
 
-
-# LO QUE VIENE A CONTINUACIÓN ES UNA ADAPTACIÓN DE UN CICLO DE ESTA PÁGINA: https://www.geeksforgeeks.org/find-co-ordinates-of-contours-using-opencv-python/
+# -
+# - 
+# - Adaptación de 1 cliclo For de esta página: 
+# - https://www.geeksforgeeks.org/find-co-ordinates-of-contours-using-opencv-python/
+# -
+# -
 
 # Obtener los vertices donde están las esquinas del contorno. Variar parámetro de escalamiento en caso de querer distintas respuestas.
 approx_inicial = cv2.approxPolyDP(max_area_contour_inicial, 0.009 * cv2.arcLength(max_area_contour_inicial, True), True)
