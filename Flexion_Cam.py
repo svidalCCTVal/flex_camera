@@ -11,62 +11,114 @@ import numpy as np
 
 font = cv2.FONT_HERSHEY_COMPLEX
 
-## APERTURA DE VIDEO
-cap = cv2.VideoCapture(1)
+
+#%% Procesamiento por video
+
+import cv2
+#import numpy as np
+import time
+
+font = cv2.FONT_HERSHEY_COMPLEX
+
+# Abrir video
+cap = cv2.VideoCapture('Video_Flexion1.MOV') #poner nombre video
+
+primer_frame = True
 
 if not cap.isOpened():
   print("Cannot open camera")
   exit()
 
-while True:
-  # Capture frame-by-frame
-  ret, frame = cap.read()
-  if not ret:
-    continue
-  resized = frame.copy()
-  del frame
-  
-  frame_to_show = cv2.medianBlur(resized, 9)
-  frame_to_show = cv2.cvtColor(frame_to_show, cv2.COLOR_BGR2GRAY)
-  umbral_frame = cv2.threshold(frame_to_show, 150, 255, cv2.THRESH_BINARY)[1]  
-  contornos_frame, _ = cv2.findContours(umbral_frame, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-  
-  if  contornos_frame:
-      max_area_contour_frame = max(contornos_frame, key=cv2.contourArea)
-      approx = cv2.approxPolyDP(max_area_contour_frame, 0.005 * cv2.arcLength(max_area_contour_frame, True), True)
-      
-      n = approx.ravel()
-      i=0
+sec_init = time.time()
 
-      for j in n : 
-              if(i % 2 == 0): 
-                  x = n[i] 
-                  y = n[i + 1] 
-        
-                  # String containing the co-ordinates. 
-                  string = str(x) + " " + str(y)  
-        
-                  if(i == 0): 
-                      # text on topmost co-ordinate. 
-                      cv2.putText(frame_to_show, "Arrow tip", (x, y), 
-                                      font, 0.5, (255, 0, 0))  
-                  else: 
-                      # text on remaining co-ordinates. 
-                      cv2.putText(frame_to_show, string, (x, y),  
-                                font, 0.5, (0, 255, 0))  
-              i = i + 1
-      
-      
-      
-      #cv2.drawContours(frame_to_show, [max_area_contour_frame], -1, (0, 255, 0), 2)
-      cv2.drawContours(frame_to_show, [approx], -1, (0, 255, 0), 2)
-  
-  cv2.imshow("MEDICION PIXELES",frame_to_show)
-  tecla = cv2.waitKey(1)
-    
-  if tecla == ord('q'):
-    break
+y_inicial = 0
 
+while (cap.isOpened()):
+    # Capture frame-by-frame
+    ret, frame = cap.read()
+    if ret==True:
+        resized = cv2.resize(frame,(1280,720))
+        
+        # Aplicar median blur para difuminar bordes
+        frame_blured = cv2.medianBlur(resized, 5)
+        
+        # Convertir a escala de grises
+        frame_gray = cv2.cvtColor(frame_blured, cv2.COLOR_BGR2GRAY)
+        
+        # Aplicar umbral para posteriormente detectar contornos con facilidad
+        frame_umbral = cv2.threshold(frame_gray, 210, 255, cv2.THRESH_BINARY)[1]
+        
+        # Encontrar contornos 
+        frame_contours, _ = cv2.findContours(frame_umbral, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        
+        # Seleccionar contorno que abarca mayor área en cada imagen 
+        max_area_frame_contours = max(frame_contours, key=cv2.contourArea)
+        
+        # Obtener los vertices donde están las esquinas del contorno. Variar parámetro de escalamiento en caso de querer distintas respuestas.
+        approx_inicial = cv2.approxPolyDP(max_area_frame_contours, 0.011 * cv2.arcLength(max_area_frame_contours, True), True)
+        
+        # Hay que obtener el valor X de la coordenada con Y más alto, para poner el dibujo la imagen
+        x_array_frame = approx_inicial[:, :, 0].ravel() 
+        y_array_frame = approx_inicial[:, :, 1].ravel()
+        
+        max_y_index = np.argmax(y_array_frame)
+        x_coordenate_y_max = x_array_frame[max_y_index]
+        
+        y_ordenado_final = np.sort(y_array_frame)[::-1]
+        
+        pos_final_y = y_ordenado_final[0] # corresponde al max value de las posiciones Y
+        
+        if primer_frame:
+            print("Primer frame")
+            y_inicial = pos_final_y
+            print(" \n \n DEFORMACIÓN FINAL:  0  [mm]")
+            primer_frame=False
+        else: 
+            deformacion_final = (pos_final_y - y_inicial)*0.13020833333333334
+            print(" \n \n DEFORMACIÓN FINAL: ", deformacion_final," [mm]")
+         
+            
+         
+        approx_matrix_flat = approx_inicial.ravel()
+
+        # Contador de elementos en arreglo approx_matrix_flat
+        i=0
+
+        for j in approx_matrix_flat : 
+                if(i % 2 == 0): 
+                    x = approx_matrix_flat[i] 
+                    y = approx_matrix_flat[i + 1] 
+          
+                    # String containing the co-ordinates. 
+                    string = str(x) + " " + str(y)  
+          
+                    if(i == 0): 
+                        # text on topmost co-ordinate. 
+                        cv2.putText(resized, "Arrow tip", (x, y), 
+                                        font, 0.5, (255, 0, 0))  
+                    else: 
+                        # text on remaining co-ordinates. 
+                        cv2.putText(resized, string, (x, y),  
+                                  font, 0.5, (0, 255, 0))  
+                i = i + 1
+        
+        cv2.drawContours(resized, [approx_inicial], -1, (0, 255, 0), 2)
+        cv2.line(resized,(x_coordenate_y_max,y_inicial),(x_coordenate_y_max,pos_final_y),(255,0,0),4)
+        
+        cv2.imshow("Video", resized)
+        
+        
+        tecla = cv2.waitKey(1)
+        if tecla == ord('q'):
+            break
+    else: break
+
+sec_final = time.time()
+
+print('Tiempo video', sec_final-sec_init)
+
+cap.release()
+cv2.destroyAllWindows()
 
 
 
@@ -84,8 +136,11 @@ imagen_inicial = cv2.resize(imagen_inicial, (1280, 720))
 imagen_final = cv2.resize(imagen_final, (1280, 720))
 
 # Aplicar filtro gaussiano para difuminar bordes
-imagen_inicial_blured = cv2.medianBlur(imagen_inicial, 9)
-imagen_final_blured = cv2.medianBlur(imagen_final, 9)
+# imagen_inicial_blured = cv2.medianBlur(imagen_inicial, 9)
+# imagen_final_blured = cv2.medianBlur(imagen_final, 9)
+
+imagen_inicial_blured = cv2.medianBlur(imagen_inicial, 3)
+imagen_final_blured = cv2.medianBlur(imagen_final, 3)
 
 # Convertir a escala de grises
 gris_inicial = cv2.cvtColor(imagen_inicial_blured, cv2.COLOR_BGR2GRAY)

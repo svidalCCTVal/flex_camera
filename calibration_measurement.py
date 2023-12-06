@@ -26,7 +26,7 @@ import numpy as np
 #        break
 
 # CALIBRACIÓN POR FOTO
-imagen = cv2.imread('imagenes/aruco2.JPG')
+imagen = cv2.imread('aruco_video1.JPG')
 
 # Definir el nuevo tamaño deseado (ajusta según tus necesidades)
 nuevo_ancho = 1280
@@ -39,7 +39,7 @@ nuevo_alto = int(imagen.shape[0] * escala)
 imagen_redimensionada = cv2.resize(imagen, (nuevo_ancho, nuevo_alto))
 
 # Definir el tamaño conocido del objeto en milímetros
-tamaño_objeto_mm = 100  # ancho previamente medido
+tamaño_objeto_mm = 50  # ancho previamente medido
 
 # Convertir la imagen a escala de grises
 imagen_gris = cv2.cvtColor(imagen_redimensionada, cv2.COLOR_BGR2GRAY)

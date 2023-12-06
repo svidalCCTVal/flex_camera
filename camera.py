@@ -10,7 +10,7 @@ from sys import exit
 
 
 #cap = cv.VideoCapture(1)
-cap = cv.VideoCapture('Video1.MOV')
+cap = cv.VideoCapture('Video_Flexion1.MOV')
 
 if not cap.isOpened():
   print("Cannot open camera")
