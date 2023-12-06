@@ -11,62 +11,66 @@ import numpy as np
 
 font = cv2.FONT_HERSHEY_COMPLEX
 
-# ## APERTURA DE VIDEO
-#cap = cv2.VideoCapture(1)
-#
-#if not cap.isOpened():
-#  print("Cannot open camera")
-#  exit()
+## APERTURA DE VIDEO
+cap = cv2.VideoCapture(1)
 
-#while True:
-#  # Capture frame-by-frame
-#  ret, frame = cap.read()
-#  if not ret:
-#    continue
-#  resized = frame.copy()
-#  del frame
-#  
-#  frame_to_show = cv2.medianBlur(resized, 9)
-#  frame_to_show = cv2.cvtColor(frame_to_show, cv2.COLOR_BGR2GRAY)
-#  umbral_frame = cv2.threshold(frame_to_show, 150, 255, cv2.THRESH_BINARY)[1]  
-#  contornos_frame, _ = cv2.findContours(umbral_frame, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-#  
-#  if  contornos_frame:
-#      max_area_contour_frame = max(contornos_frame, key=cv2.contourArea)
-#      approx = cv2.approxPolyDP(max_area_contour_frame, 0.005 * cv2.arcLength(max_area_contour_frame, True), True)
-#      
-#      n = approx.ravel()
-#      i=0
-#
-#      for j in n : 
-#              if(i % 2 == 0): 
-#                  x = n[i] 
-#                  y = n[i + 1] 
-#        
-#                  # String containing the co-ordinates. 
-#                  string = str(x) + " " + str(y)  
-#        
-#                  if(i == 0): 
-#                      # text on topmost co-ordinate. 
-#                      cv2.putText(frame_to_show, "Arrow tip", (x, y), 
-#                                      font, 0.5, (255, 0, 0))  
-#                  else: 
-#                      # text on remaining co-ordinates. 
-#                      cv2.putText(frame_to_show, string, (x, y),  
-#                                font, 0.5, (0, 255, 0))  
-#              i = i + 1
-#      
-#      
-#      
-#      #cv2.drawContours(frame_to_show, [max_area_contour_frame], -1, (0, 255, 0), 2)
-#      cv2.drawContours(frame_to_show, [approx], -1, (0, 255, 0), 2)
-#  
-#  cv2.imshow("MEDICION PIXELES",frame_to_show)
-#  tecla = cv2.waitKey(1)
-#    
-#  if tecla == ord('q'):
-#    break
+if not cap.isOpened():
+  print("Cannot open camera")
+  exit()
 
+while True:
+  # Capture frame-by-frame
+  ret, frame = cap.read()
+  if not ret:
+    continue
+  resized = frame.copy()
+  del frame
+  
+  frame_to_show = cv2.medianBlur(resized, 9)
+  frame_to_show = cv2.cvtColor(frame_to_show, cv2.COLOR_BGR2GRAY)
+  umbral_frame = cv2.threshold(frame_to_show, 150, 255, cv2.THRESH_BINARY)[1]  
+  contornos_frame, _ = cv2.findContours(umbral_frame, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+  
+  if  contornos_frame:
+      max_area_contour_frame = max(contornos_frame, key=cv2.contourArea)
+      approx = cv2.approxPolyDP(max_area_contour_frame, 0.005 * cv2.arcLength(max_area_contour_frame, True), True)
+      
+      n = approx.ravel()
+      i=0
+
+      for j in n : 
+              if(i % 2 == 0): 
+                  x = n[i] 
+                  y = n[i + 1] 
+        
+                  # String containing the co-ordinates. 
+                  string = str(x) + " " + str(y)  
+        
+                  if(i == 0): 
+                      # text on topmost co-ordinate. 
+                      cv2.putText(frame_to_show, "Arrow tip", (x, y), 
+                                      font, 0.5, (255, 0, 0))  
+                  else: 
+                      # text on remaining co-ordinates. 
+                      cv2.putText(frame_to_show, string, (x, y),  
+                                font, 0.5, (0, 255, 0))  
+              i = i + 1
+      
+      
+      
+      #cv2.drawContours(frame_to_show, [max_area_contour_frame], -1, (0, 255, 0), 2)
+      cv2.drawContours(frame_to_show, [approx], -1, (0, 255, 0), 2)
+  
+  cv2.imshow("MEDICION PIXELES",frame_to_show)
+  tecla = cv2.waitKey(1)
+    
+  if tecla == ord('q'):
+    break
+
+
+
+
+#%% Procesamiento en base a dos imagenes: Inicial -> Final
 
 #Relación pixel-milimetro
 relacion_pixel_mm = 0.1736111111111111
