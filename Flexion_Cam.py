@@ -15,10 +15,12 @@ font = cv2.FONT_HERSHEY_COMPLEX
 #%% Procesamiento por video
 
 import cv2
-#import numpy as np
+import numpy as np
 import time
+import pandas as pd
 
 font = cv2.FONT_HERSHEY_COMPLEX
+
 
 # Abrir video
 cap = cv2.VideoCapture('Video_Flexion1.MOV') #poner nombre video
@@ -32,6 +34,8 @@ if not cap.isOpened():
 sec_init = time.time()
 
 y_inicial = 0
+deformacion_final = 0
+deformation_list = []
 
 while (cap.isOpened()):
     # Capture frame-by-frame
@@ -76,7 +80,8 @@ while (cap.isOpened()):
         else: 
             deformacion_final = (pos_final_y - y_inicial)*0.13020833333333334
             print(" \n \n DEFORMACIÓN FINAL: ", deformacion_final," [mm]")
-         
+        
+        deformation_list.append(deformacion_final)
             
          
         approx_matrix_flat = approx_inicial.ravel()
@@ -121,6 +126,13 @@ cap.release()
 cv2.destroyAllWindows()
 
 
+#Exportar deformaciones a excel
+data = {'Columna': deformation_list}
+df = pd.DataFrame(data)
+
+# Exportar a un archivo Excel
+nombre_archivo_excel = 'output.xlsx'
+df.to_excel(nombre_archivo_excel, index=False)
 
 #%% Procesamiento en base a dos imagenes: Inicial -> Final
 
