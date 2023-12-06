@@ -3,7 +3,7 @@
 """
 Created on Mon Nov 27 12:25:53 2023
 
-@author: cctval
+@author: CCTVal - SVL
 """
 
 import cv2

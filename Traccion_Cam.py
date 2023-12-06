@@ -2,8 +2,122 @@
 """
 Created on Mon Dec  4 14:16:47 2023
 
-@author: CCTVAL
+@author: CCTVal - SVL
 """
+import cv2
+import time
+import numpy as np
+
+font = cv2.FONT_HERSHEY_COMPLEX
+
+#Relación pixel-milimetro
+relacion_pixel_mm = 0.1736111111111111
+
+
+# Abrir video
+cap = cv2.VideoCapture('')
+
+primer_frame = True
+
+if not cap.isOpened():
+  print("Cannot open camera")
+  exit() 
+
+sec_init = time.time()
+
+while (cap.isOpened()):
+    # Capture frame-by-frame
+    ret, frame = cap.read()
+    if ret==True:
+        
+        # Re dimenzionar imagenes a tamaño 1280 o el que se requiera
+        imagen_inicial = cv2.resize(frame, (1280, 720))
+        
+        # Aplicar filtro gaussiano para difuminar bordes
+        imagen_inicial_blured = cv2.medianBlur(imagen_inicial, 9)
+
+        # Convertir a escala de grises
+        gris_inicial = cv2.cvtColor(imagen_inicial_blured, cv2.COLOR_BGR2GRAY)
+        
+        # Aplicar umbral para posteriormente detectar contornos con facilidad
+        umbral_inicial = cv2.threshold(gris_inicial, 150, 255, cv2.THRESH_BINARY_INV)[1]
+        
+        # Encontrar contornos de imagen inicial y final
+        contornos_inicial, _ = cv2.findContours(umbral_inicial, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        
+        # Seleccionar contorno que abarca mayor área en cada imagen 
+        max_area_contour_inicial = max(contornos_inicial, key=cv2.contourArea)
+        
+        # Obtener los vertices donde están las esquinas del contorno. Variar parámetro de escalamiento en caso de querer distintas respuestas.
+        approx_inicial = cv2.approxPolyDP(max_area_contour_inicial, 0.011 * cv2.arcLength(max_area_contour_inicial, True), True)
+        
+        # Hay que obtener el valor X de la coordenada con Y más alto, para poner el dibujo la imagen
+        x_array_inicial =  approx_inicial[:, :, 0].ravel()
+        y_array_inicial = approx_inicial[:, :, 1].ravel()
+        
+        ###  ESTO DEBE HACERSE SOLO PARA EL PRIMER FRAME  ### REVISAR DESDE ACÁ JUEVES 07/12
+        x_ordenado_inicial = np.sort(x_array_inicial)[::-1]
+        y_ordenado_inicial = np.sort(y_array_inicial)[::-1]
+
+        y_o1 = y_ordenado_inicial[3]
+        y_o2 = y_ordenado_inicial[2]
+        
+        tecla = cv2.waitKey(1)
+        if tecla == ord('q'):
+                break
+    else: break
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#%% RUTINA POR DOS FOTOS
+
 import cv2
 import numpy as np
 
@@ -109,6 +223,7 @@ print(" \n \n DEFORMACIÓN FINAL:   ", deformacion_final, "[mm]")
 
 
 # A CONTINUACIÓN SE USA SOLO PARA PONER TEXTOS EN LAS ESQUINAS DETECTADAS
+
 # Transformar la matrix anterior a vector de una dimensión
 approx_matrix_final_flat = approx_final.ravel()
 approx_matrix_inicial_flat = approx_inicial.ravel()
