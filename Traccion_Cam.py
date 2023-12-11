@@ -118,6 +118,8 @@ while (cap.isOpened()):
 
 #%% RUTINA POR DOS FOTOS
 
+#BLAAAA
+
 import cv2
 import numpy as np
 
