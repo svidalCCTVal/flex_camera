@@ -7,6 +7,7 @@ Created on Mon Dec  4 14:16:47 2023
 import cv2
 import time
 import numpy as np
+from sys import exit
 
 font = cv2.FONT_HERSHEY_COMPLEX
 
@@ -15,7 +16,7 @@ relacion_pixel_mm = 0.1736111111111111
 
 
 # Abrir video
-cap = cv2.VideoCapture('')
+cap = cv2.VideoCapture('../Videos_Flexion_Cam/Video1.MOV')
 
 primer_frame = True
 
@@ -61,6 +62,8 @@ while (cap.isOpened()):
 
         y_o1 = y_ordenado_inicial[3]
         y_o2 = y_ordenado_inicial[2]
+        
+        cv2.imshow("Video", frame)
         
         tecla = cv2.waitKey(1)
         if tecla == ord('q'):
@@ -117,8 +120,6 @@ while (cap.isOpened()):
 
 
 #%% RUTINA POR DOS FOTOS
-
-#BLAAAA
 
 import cv2
 import numpy as np
