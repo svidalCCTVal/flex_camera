@@ -26,7 +26,7 @@ import numpy as np
 #        break
 
 # CALIBRACIÓN POR FOTO
-imagen = cv2.imread('aruco_video1.JPG')
+imagen = cv2.imread('../Videos_Flexion_Cam/Calibracion_Ensayo_Compresion_1.JPG')
 
 # Definir el nuevo tamaño deseado (ajusta según tus necesidades)
 nuevo_ancho = 1280

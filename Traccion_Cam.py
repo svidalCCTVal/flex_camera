@@ -16,15 +16,27 @@ relacion_pixel_mm = 0.1736111111111111
 
 
 # Abrir video
-cap = cv2.VideoCapture('../Videos_Flexion_Cam/Video1.MOV')
+cap = cv2.VideoCapture('../Videos_Flexion_Cam/Ensayo_Compresion_1.MOV')
 
-primer_frame = True
+
 
 if not cap.isOpened():
   print("Cannot open camera")
   exit() 
 
-sec_init = time.time()
+second_init = time.time()
+
+first_frame = True
+pixel_mm_ratio = 0.08460236886632826
+y_initial = 0
+x_initial = 0
+max_pixel_change = 75
+pixel_change_count_up = 0
+pixel_change_count_down = 0 
+pixel_deformation = 0
+
+conteo_disminucion = 0
+max_conteo_disminucion = 10
 
 while (cap.isOpened()):
     # Capture frame-by-frame
@@ -35,80 +47,83 @@ while (cap.isOpened()):
         imagen_inicial = cv2.resize(frame, (1280, 720))
         
         # Aplicar filtro gaussiano para difuminar bordes
-        imagen_inicial_blured = cv2.medianBlur(imagen_inicial, 9)
+        #imagen_inicial_blured = cv2.medianBlur(imagen_inicial, 5)
+        imagen_inicial_blured = imagen_inicial
 
         # Convertir a escala de grises
         gris_inicial = cv2.cvtColor(imagen_inicial_blured, cv2.COLOR_BGR2GRAY)
         
         # Aplicar umbral para posteriormente detectar contornos con facilidad
-        umbral_inicial = cv2.threshold(gris_inicial, 150, 255, cv2.THRESH_BINARY_INV)[1]
+        umbral_inicial = cv2.threshold(gris_inicial, 130, 255, cv2.THRESH_BINARY_INV)[1]
         
-        # Encontrar contornos de imagen inicial y final
+        # Encontrar contornos de imagen
         contornos_inicial, _ = cv2.findContours(umbral_inicial, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         
-        # Seleccionar contorno que abarca mayor área en cada imagen 
+        # Seleccionar contorno que abarca mayor área en cada frame
         max_area_contour_inicial = max(contornos_inicial, key=cv2.contourArea)
         
         # Obtener los vertices donde están las esquinas del contorno. Variar parámetro de escalamiento en caso de querer distintas respuestas.
-        approx_inicial = cv2.approxPolyDP(max_area_contour_inicial, 0.011 * cv2.arcLength(max_area_contour_inicial, True), True)
+        approx_inicial = cv2.approxPolyDP(max_area_contour_inicial, 0.009 * cv2.arcLength(max_area_contour_inicial, True), True)
+        
+        cv2.drawContours(imagen_inicial, [approx_inicial], -1, (0, 0, 255), 2)
         
         # Hay que obtener el valor X de la coordenada con Y más alto, para poner el dibujo la imagen
         x_array_inicial =  approx_inicial[:, :, 0].ravel()
         y_array_inicial = approx_inicial[:, :, 1].ravel()
         
-        ###  ESTO DEBE HACERSE SOLO PARA EL PRIMER FRAME  ### REVISAR DESDE ACÁ JUEVES 07/12
-        x_ordenado_inicial = np.sort(x_array_inicial)[::-1]
+        ###  SE OBTIENE POSICIÓN DE (X,Y) PARA GUARDAR ESTADO INICIAL  
+        x_ordenado_inicial = np.sort(x_array_inicial)[::-1] 
         y_ordenado_inicial = np.sort(y_array_inicial)[::-1]
 
+        # Tomar los valores de y de las esquinas superiores del rectangulo detectado - Estos valores nos sirven para todos los frames
         y_o1 = y_ordenado_inicial[3]
         y_o2 = y_ordenado_inicial[2]
         
-        cv2.imshow("Video", frame)
+        y_mean_actual = round((y_o1+y_o2)/2) 
+        
+        if first_frame:
+            y_mean = round((y_o1+y_o2)/2)
+            y_initial = y_mean
+            first_frame = False
+        else:
+            if y_mean_actual < y_mean :
+                conteo_disminucion += 1
+            else: 
+                conteo_disminucion=0
+            
+            if conteo_disminucion >= max_conteo_disminucion:
+                print("¡Disminución rápida detectada! Deteniendo la lectura del video luego de ",max_conteo_disminucion,"frames.")
+                break
+
+            if y_mean_actual>y_mean:
+                pixel_change_count_up += 1 
+            else: 
+                pixel_change_count_up = 0
+                
+            if pixel_change_count_up >= max_pixel_change:
+                pixel_change_count_up=0
+                y_mean = round((y_o1+y_o2)/2)
+                
+            pixel_deformation = y_mean - y_initial
+
+        print("y_mean:", y_mean, "pixel_deformation:",pixel_deformation,"(y_o1+y_o2)/2:",y_mean_actual)
+        cv2.imshow("Video", imagen_inicial)
         
         tecla = cv2.waitKey(1)
         if tecla == ord('q'):
                 break
+    
     else: break
 
+second_end = time.time()
 
+cap.release()
+cv2.destroyAllWindows()
 
+while_duration = second_end-second_init
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+print("while_duration:", while_duration)
+print('Deformación Final=', pixel_deformation*pixel_mm_ratio)
 
 
 

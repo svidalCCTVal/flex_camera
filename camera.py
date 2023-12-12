@@ -2,7 +2,7 @@
 """
 Created on Fri Nov 24 10:46:16 2023
 
-@author: CCTVAL
+@author: CCTVal - SVL
 """
 
 import cv2 as cv 
