@@ -12,33 +12,26 @@ import pandas as pd
 
 font = cv2.FONT_HERSHEY_COMPLEX
 
-#Relación pixel-milimetro
-relacion_pixel_mm = 0.1736111111111111
-
-
-# Abrir video
-cap = cv2.VideoCapture('../Videos_Flexion_Cam/Ensayo_Compresion_1.MOV')
-
-
-
-if not cap.isOpened():
-  print("Cannot open camera")
-  exit() 
-
 second_init = time.time()
 
 first_frame = True
 pixel_mm_ratio = 0.08460236886632826
 y_initial = 0
 x_initial = 0
-max_pixel_change = 75
+max_pixel_change = 35
 pixel_change_count_up = 0
 pixel_change_count_down = 0 
 pixel_deformation = 0
 pixel_deformation_list = []
-
 conteo_disminucion = 0
 max_conteo_disminucion = 10
+
+# Abrir video
+cap = cv2.VideoCapture('../Videos_Flexion_Cam/Ensayo_Compresion_1.MOV')
+
+if not cap.isOpened():
+  print("Cannot open camera")
+  exit() 
 
 while (cap.isOpened()):
     # Capture frame-by-frame
@@ -108,7 +101,7 @@ while (cap.isOpened()):
                 
             pixel_deformation = y_mean - y_initial
             
-        pixel_deformation_list.append(y_mean)
+        pixel_deformation_list.append(pixel_deformation*pixel_mm_ratio)
         print("y_mean:", y_mean, "pixel_deformation:",pixel_deformation,"(y_o1+y_o2)/2:",y_mean_actual)
         cv2.imshow("Video", imagen_inicial)
         
