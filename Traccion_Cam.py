@@ -8,6 +8,7 @@ import cv2
 import time
 import numpy as np
 from sys import exit
+import pandas as pd
 
 font = cv2.FONT_HERSHEY_COMPLEX
 
@@ -34,6 +35,7 @@ max_pixel_change = 75
 pixel_change_count_up = 0
 pixel_change_count_down = 0 
 pixel_deformation = 0
+pixel_deformation_list = []
 
 conteo_disminucion = 0
 max_conteo_disminucion = 10
@@ -105,7 +107,8 @@ while (cap.isOpened()):
                 y_mean = round((y_o1+y_o2)/2)
                 
             pixel_deformation = y_mean - y_initial
-
+            
+        pixel_deformation_list.append(y_mean)
         print("y_mean:", y_mean, "pixel_deformation:",pixel_deformation,"(y_o1+y_o2)/2:",y_mean_actual)
         cv2.imshow("Video", imagen_inicial)
         
@@ -125,7 +128,13 @@ while_duration = second_end-second_init
 print("while_duration:", while_duration)
 print('Deformación Final=', pixel_deformation*pixel_mm_ratio)
 
+#Exportar deformaciones a excel
+data = {'Columna': pixel_deformation_list}
+df = pd.DataFrame(data)
 
+# Exportar a un archivo Excel
+nombre_archivo_excel = 'Extension.xlsx'
+df.to_excel(nombre_archivo_excel, index=False)
 
 
 
