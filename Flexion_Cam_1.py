@@ -23,7 +23,7 @@ font = cv2.FONT_HERSHEY_COMPLEX
 
 
 # Abrir video
-cap = cv2.VideoCapture('Video_Flexion1.MOV') #poner nombre video
+cap = cv2.VideoCapture('../Videos_Flexion_Cam/Video_Flexion1.MOV') #poner nombre video
 
 primer_frame = True
 
