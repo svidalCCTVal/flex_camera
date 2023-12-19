@@ -3,6 +3,7 @@
 - STEADY SEGMENT - 
 
 Código tomado del proyecto Double Target para sacar ideas de la utilización de OpenCV en la identificación de imagenes de referencia. 
+No se utiliza en proyecto de detección de flexión.
 
 Created on 'unkwowm'
 @author: 'unknown'

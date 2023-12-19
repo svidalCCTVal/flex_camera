@@ -3,7 +3,7 @@
 """
 - PRUEBA SEBA 1 - 
 
-Código de pruebas y experimentación creada por Sebastián Vidal. No se utiliza en los códigos reales de medición. 
+Código de pruebas y experimentación creada por Sebastián Vidal. Código no utilizado en pruebas reales.
 
 Created on Fri Nov 24 14:18:19 2023
 @author: CCTVal - SVL

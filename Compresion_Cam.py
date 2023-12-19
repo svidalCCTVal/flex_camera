@@ -22,6 +22,7 @@ Output:
 Created on Mon Dec  4 14:16:47 2023
 @author: CCTVal - SVL
 """
+
 import cv2
 import time
 import numpy as np
@@ -155,6 +156,11 @@ df.to_excel(nombre_archivo_excel, index=False)
 
 
 #%% RUTINA POR DOS FOTOS
+
+"""
+Código de prueba en base a fotos para probar detección y algoritmo de compresion.
+
+"""
 
 import cv2
 import numpy as np

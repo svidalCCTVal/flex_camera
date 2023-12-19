@@ -7,9 +7,16 @@ No corresponde a un seguimiento de elementos de las maderas.
 
 Estado: Validado para video controlado o fotos. Falta validar en laboratorio. 
 Pendientes: 
-    - Generar codigo para expulsar mediciones en planilla. 
     - Probar código con ensayo real.
     - Realizar sincronización del procesamiento del códigos. Para esto es necesario poder tener un video del ensayo real. 
+    - Analizar y parchar problemas de malas mediciones debido a repeticion de pixeles. Es necesario tener video de ensayo en tiempo real.
+
+Input: 
+    - Video de experimento
+    
+Output: (Pendiente)
+    - Excel con deformaciones
+
 
 Created on Mon Nov 27 12:25:53 2023
 @author: CCTVal - SVL
@@ -82,14 +89,16 @@ while (cap.isOpened()):
             deformacion_final = (pos_final_y - y_inicial)*0.13020833333333334
             print(" \n \n DEFORMACIÓN FINAL: ", deformacion_final," [mm]")
         
+        # Se añade deformación actual en lista a exportar
         deformation_list.append(deformacion_final)
-            
-         
+        
+        # Aplana a una dimensión la matriz approx_inicial
         approx_matrix_flat = approx_inicial.ravel()
 
         # Contador de elementos en arreglo approx_matrix_flat
         i=0
-
+        
+        # Ubicar vertices y poner textos en vertices sobre la imagen
         for j in approx_matrix_flat : 
                 if(i % 2 == 0): 
                     x = approx_matrix_flat[i] 
@@ -108,32 +117,30 @@ while (cap.isOpened()):
                                   font, 0.5, (0, 255, 0))  
                 i = i + 1
         
+        # Dibujar contornos y lineas en frame actual 
         cv2.drawContours(resized, [approx_inicial], -1, (0, 255, 0), 2)
         cv2.line(resized,(x_coordenate_y_max,y_inicial),(x_coordenate_y_max,pos_final_y),(255,0,0),4)
         
+        # Mostrar frame en bruto con las lineas y contornos dibujados
         cv2.imshow("Video", resized)
         
-        
+        # Considerar tecla de escape para salir del video
         tecla = cv2.waitKey(1)
         if tecla == ord('q'):
             break
     else: break
 
-sec_final = time.time()
-
-print('Tiempo video', sec_final-sec_init)
-
-
 cap.release()
 cv2.destroyAllWindows()
 
+# Calcular y printear cuanto demoró el procesamiento del video
+sec_final = time.time()
+print('Tiempo video', sec_final-sec_init)
 
 #Exportar deformaciones a excel
-data = {'Columna': deformation_list}
+data = {'Dformación': deformation_list}
 df = pd.DataFrame(data)
-
-# Exportar a un archivo Excel
-nombre_archivo_excel = 'output.xlsx'
+nombre_archivo_excel = 'Output_Flexion_Cam1.xlsx'
 df.to_excel(nombre_archivo_excel, index=False)
 
 #%% Procesamiento en base a dos imagenes: Inicial -> Final
