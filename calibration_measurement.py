@@ -1,7 +1,17 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Nov 29 16:40:41 2023
+- CALIBRATION MEASUREMENT - 
 
+Código para realizar calibración de la medición de pixeles en base a un cuadrado aruco de medidas conocidas. 
+
+Input: 
+    - imagen: Poner ruta de la foto de calibración.
+    - tamano_objeto_mm: Medida del lado del cuadrado en milimetros
+
+Output: 
+    - relacion_pixel_mm: En consola se printea tamaño de 1 pixel en milímetros
+
+Created on Wed Nov 29 16:40:41 2023
 @author: CCTVAL
 """
 

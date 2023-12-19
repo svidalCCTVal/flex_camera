@@ -1,9 +1,11 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Mon Nov 27 14:31:11 2023
+- FIND BLACK CONTOUR - 
 
-@author: cctval
+Código de pruebas para identificar contornos de objetos obscuros. No se utiliza en los experimentos.
+
+Created on Mon Nov 27 14:31:11 2023
+@author: CCTVal - SVL
 """
 
 import cv2 

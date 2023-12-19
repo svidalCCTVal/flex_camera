@@ -1,9 +1,11 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Fri Nov 24 13:53:21 2023
+- PRUEBA LUIS 1 -
 
-@author: cctval
+Código de primera aproximación realizada por Luis Osorio para la medición de distancias con OpenCV. Código no utilizado en las mediciones reales. 
+
+Created on Fri Nov 24 13:53:21 2023
+@author: CCTVal - LO
 """
 
 

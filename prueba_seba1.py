@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Fri Nov 24 14:18:19 2023
+- PRUEBA SEBA 1 - 
 
-@author: cctval
+Código de pruebas y experimentación creada por Sebastián Vidal. No se utiliza en los códigos reales de medición. 
+
+Created on Fri Nov 24 14:18:19 2023
+@author: CCTVal - SVL
 """
 
 

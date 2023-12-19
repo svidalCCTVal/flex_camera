@@ -1,7 +1,25 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Dec  4 14:16:47 2023
+- COMPRESION CAM -
 
+Código realizado para medir la variación del tamaño de madera expuesta a presión sobre esta causando una compresión del material.
+El código basa su funcionamiento en base a la detección del objeto oscuro con mayor área y verificar la variación de la arista inicial. 
+
+Estado: Validado con video real grabado en laboratorio DIM. Sincronización del final del video logrado en base a movimiento contrario a compresión sostenido. 
+Pendientes: 
+    - Lograr sincronización del inicio del video.
+
+Input: 
+    - pixel_mm_ratio: Valor obtenido del codigo "calibration_measurement.py"
+    - max_pixel_change: Cantidad de pixeles sostenidos en aumento para considerar que la posición de la madera cambió en posición. En caso de que se haga un ensayo
+    rápido podría considerarse hacer este valor más pequeño, para obtener mayor precisión.
+    - max_conteo_disminucion: Cantidad de pixeles sostenidos en contra de la compresión para detectar fin del experimento. En caso de que sea muy rápido el
+    decrecimiento podría hacerse este número menor. 
+    
+Output: 
+    - nombre_archivo_excel: Columna de variacion de pixeles con su conversión a milímetros se exporta en formato '.xlsx' en la carpeta del código.    
+    
+Created on Mon Dec  4 14:16:47 2023
 @author: CCTVal - SVL
 """
 import cv2
@@ -126,7 +144,7 @@ data = {'Columna': pixel_deformation_list}
 df = pd.DataFrame(data)
 
 # Exportar a un archivo Excel
-nombre_archivo_excel = 'Extension.xlsx'
+nombre_archivo_excel = 'Compresion.xlsx'
 df.to_excel(nombre_archivo_excel, index=False)
 
 

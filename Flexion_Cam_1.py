@@ -1,18 +1,19 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Mon Nov 27 12:25:53 2023
+- FLEXION CAM 1 -
 
+Código para procesar Flexión de materiales donde se genera un "Valle". Funciona en torno a la variación del área externa de las maderas expuestas a experimentación. 
+No corresponde a un seguimiento de elementos de las maderas. 
+
+Estado: Validado para video controlado o fotos. Falta validar en laboratorio. 
+Pendientes: 
+    - Generar codigo para expulsar mediciones en planilla. 
+    - Probar código con ensayo real.
+    - Realizar sincronización del procesamiento del códigos. Para esto es necesario poder tener un video del ensayo real. 
+
+Created on Mon Nov 27 12:25:53 2023
 @author: CCTVal - SVL
 """
-
-import cv2
-import numpy as np
-
-font = cv2.FONT_HERSHEY_COMPLEX
-
-
-#%% Procesamiento por video
 
 import cv2
 import numpy as np

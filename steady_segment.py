@@ -1,3 +1,13 @@
+# -*- coding: utf-8 -*-
+"""
+- STEADY SEGMENT - 
+
+Código tomado del proyecto Double Target para sacar ideas de la utilización de OpenCV en la identificación de imagenes de referencia. 
+
+Created on 'unkwowm'
+@author: 'unknown'
+"""
+
 ##distancia entre el sensor y un target 273[mm] dx = 160,dy = 210,thresholdGrey = 88,thresholdAreaMin = 30000,thresholdAreaMax = 60000
 ##distancia entre el sensor y un target 650[mm] dx = 45,dy = 50,thresholdGrey = 190,thresholdAreaMin = 1500,thresholdAreaMax = 2000
 ##distancia entre el sensor y un target 650[mm] dx = 190,dy = 200,thresholdGrey = 135,thresholdAreaMin = 40000,thresholdAreaMax = 60000

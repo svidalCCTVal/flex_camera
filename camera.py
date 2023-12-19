@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Nov 24 10:46:16 2023
+- CAMERA - 
+Código para probar cámaras conectadas a PC, o reproducir video a partir de archivos.
 
+Created on Fri Nov 24 10:46:16 2023
 @author: CCTVal - SVL
 """
 
