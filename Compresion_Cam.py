@@ -46,7 +46,7 @@ conteo_disminucion = 0
 max_conteo_disminucion = 10
 
 # Abrir video
-cap = cv2.VideoCapture('../Videos_Flexion_Cam/Ensayo_Compresion_1.MOV')
+cap = cv2.VideoCapture('../Registros_FlexCam/Ensayo_Compresion_1.MOV')
 
 if not cap.isOpened():
   print("Cannot open camera")

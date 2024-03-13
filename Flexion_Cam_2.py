@@ -13,22 +13,29 @@ import numpy as np
 # import time
 # import pandas as pd
 
+# GLOBAL VARIABLES 
+LENGTH_PX = 1280 
+WIDTH_PX = 720
+
+
+# STYLE VARIABLES
 font = cv2.FONT_HERSHEY_COMPLEX
 
-# Abrir video
-cap = cv2.VideoCapture('../Registros_FlexCam/27_12_2023/DSC_0100.MOV') #poner nombre video
 
-if not cap.isOpened():
+# Abrir video
+capture = cv2.VideoCapture('../Registros_FlexCam/27_12_2023/DSC_0100.MOV') #poner nombre video
+
+if not capture.isOpened():
   print("Cannot open camera")
   exit()
   
-while (cap.isOpened()):
+while (capture.isOpened()):
     # Capture frame-by-frame
-    ret, frame = cap.read()
-    if ret==True:
-        resized = cv2.resize(frame,(1280,720))
+    val_returned, frame = capture.read()
+    if val_returned==True:
+        resized_frame = cv2.resize(frame,(LENGTH_PX,WIDTH_PX))
         
-        ventana_recortada = resized[100:720, 200:1280]
+        ventana_recortada = resized_frame[100:720, 200:1280] # estos valores de recorte son al ojo según el tipo de video, Hay que ver como establecer algo parametrizado completo
         
         frame_gray = cv2.cvtColor(ventana_recortada, cv2.COLOR_BGR2GRAY)
         
@@ -69,6 +76,6 @@ while (cap.isOpened()):
             break
     else: break
 
-cap.release()
+capture.release()
 cv2.destroyAllWindows()
 
