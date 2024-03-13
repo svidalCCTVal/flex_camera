@@ -14,7 +14,7 @@ Pendientes:
 Input: 
     - Video de experimento
     
-Output: (Pendiente)
+Output:
     - Excel con deformaciones
 
 
@@ -31,7 +31,8 @@ font = cv2.FONT_HERSHEY_COMPLEX
 
 
 # Abrir video
-cap = cv2.VideoCapture('../Videos_Flexion_Cam/Video_Flexion1.MOV') #poner nombre video
+cap = cv2.VideoCapture('../Registros_FlexCam/Video_Flexion1.MOV') #poner nombre video
+salida = cv2.VideoWriter('videoSalida.avi',cv2.VideoWriter_fourcc(*'XVID'),20.0,(1280,720))
 
 primer_frame = True
 
@@ -123,6 +124,7 @@ while (cap.isOpened()):
         
         # Mostrar frame en bruto con las lineas y contornos dibujados
         cv2.imshow("Video", resized)
+        salida.write(resized)
         
         # Considerar tecla de escape para salir del video
         tecla = cv2.waitKey(1)

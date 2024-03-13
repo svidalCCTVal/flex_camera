@@ -19,7 +19,7 @@ import cv2
 import numpy as np
 
 # Abrir imagen del cuadrado aruco de calibración
-imagen = cv2.imread('../Videos_Flexion_Cam/Calibracion_Ensayo_Compresion_1.JPG')
+imagen = cv2.imread('../Registros_FlexCam/Calibracion_Ensayo_Compresion_1.JPG')
 
 # Medida del lado del cuadrado aruco medida previamente, en milímetros
 tamaño_objeto_mm = 50 
@@ -38,7 +38,7 @@ imagen_redimensionada = cv2.resize(imagen, (nuevo_ancho, nuevo_alto))
 imagen_gris = cv2.cvtColor(imagen_redimensionada, cv2.COLOR_BGR2GRAY)
 
 # Aplicar la binarización (umbralización) para obtener una imagen binaria
-_, umbral = cv2.threshold(imagen_gris, 127, 255, cv2.THRESH_BINARY_INV)
+_, umbral = cv2.threshold(imagen_gris, 200, 255, cv2.THRESH_BINARY_INV)
 
 # Encontrar contornos en la imagen binaria
 contornos, _ = cv2.findContours(umbral, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)

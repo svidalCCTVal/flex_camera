@@ -14,7 +14,7 @@ import numpy as np
 ## PARTE DE PROCESO DE IMAGENES
 
 # Let's load a simple image with 3 black squares 
-image = cv2.imread('madera_rota5.jpg') 
+image = cv2.imread('../Registros_FlexCam/27_12_2023/DSC_0093.jpg')
 cv2.waitKey(0) 
 
 image = cv2.resize(image, (1280, 720))
