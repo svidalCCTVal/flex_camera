@@ -37,10 +37,11 @@ while (capture.isOpened()):
         
         frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         
-        frame_umbral = cv2.adaptiveThreshold(frame_gray,150,cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,11,2) 
+        frame_umbral = cv2.threshold(frame_gray,35,255,cv2.THRESH_BINARY)[1] 
         
         
-        cv2.imshow("Video",frame_umbral)
+        cv2.imshow("Video B&N",frame_umbral)
+        cv2.imshow("Video Original", frame)
         
         tecla = cv2.waitKey(1)
         if tecla == ord('q'):
