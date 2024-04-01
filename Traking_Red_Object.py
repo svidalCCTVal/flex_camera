@@ -17,13 +17,20 @@ import numpy as np
 
 # GLOBAL VARIABLES 
 LENGTH_PX = 1280 
-WIDTH_PX = 720
+WIDTH_PX = 720 
+
+# Cambiar nombres a estas variables
+redBajo1 = np.array([0, 100, 20], np.uint8)
+redAlto1 = np.array([8, 255, 255], np.uint8)
+
+redBajo2=np.array([175, 100, 20], np.uint8)
+redAlto2=np.array([179, 255, 255], np.uint8)
 
 # STYLE VARIABLES
 font = cv2.FONT_HERSHEY_COMPLEX
 
 # Abrir video
-capture = cv2.VideoCapture('../Registros_FlexCam/27_12_2023/DSC_0094.MOV')
+capture = cv2.VideoCapture('../Registros_FlexCam/25_03_2024/DSC_0102.MOV')
 
 if not capture.isOpened():
   print("Cannot open camera")
@@ -37,10 +44,16 @@ while (capture.isOpened()):
         
         frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         
+        frame_hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        
         frame_umbral = cv2.threshold(frame_gray,35,255,cv2.THRESH_BINARY)[1] 
+
+        maskRed1 = cv2.inRange(frame_hsv, redBajo1, redAlto1)
+        maskRed2 = cv2.inRange(frame_hsv, redBajo2, redAlto2)
+        #maskRed = cv2.add(maskRed1, maskRed2)
+        maskRedvis = cv2.bitwise_and(frame, frame, mask= maskRed1)  
         
-        
-        cv2.imshow("Video B&N",frame_umbral)
+        cv2.imshow("Video B&N",maskRedvis)
         cv2.imshow("Video Original", frame)
         
         tecla = cv2.waitKey(1)
